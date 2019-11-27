@@ -11,7 +11,15 @@ class SpecificClassifier : Classifier {
     private val classifications = mapOf(
             "keith" to EVIL_GENIUS_ROBOT,
             "keith marshall" to EVIL_GENIUS_ROBOT,
-            "rock" to MINERAL
+
+            // WN finds 'jean' i.e. denim and so gives MINERAL
+            "jean-michel jarre" to ANIMAL,
+            "jean michel jarre" to ANIMAL,
+
+            // WN finds 'John Rock' so gives ANIMAL
+            "rock" to MINERAL,
+
+            "salad" to VEGETABLE
     )
 
     override fun classify(word: String): Classification {

@@ -20,5 +20,16 @@ internal class MasterClassifierTest {
         assertEquals(VEGETABLE, classifier.classify("plant"))
         assertEquals(MINERAL, classifier.classify("mineral"))
         assertEquals(MINERAL, classifier.classify("rock"))
+        assertEquals(ANIMAL, classifier.classify("Queen Elizabeth"))
+        assertEquals(ANIMAL, classifier.classify("Queen Elizabeth II"))
+
+        assertEquals(ANIMAL, classifier.classify("Jean-Michel Jarre"))
+
+        assertEquals(ANIMAL, classifier.classify("sea cucumber"))
+        assertEquals(VEGETABLE, classifier.classify("cucumber"))
+        assertEquals(MINERAL, classifier.classify("granite"))
+//        assertEquals(ANIMAL, classifier.classify("Pikachu")) - // Detected as MINERAL at the moment
+//        assertEquals(ANIMAL, classifier.classify("Ash")) // finds the tree, so returns VEGETABLE
+        assertEquals(ANIMAL, classifier.classify("Velociraptor"))
     }
 }

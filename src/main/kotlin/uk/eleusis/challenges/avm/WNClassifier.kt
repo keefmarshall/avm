@@ -36,9 +36,9 @@ class WNClassifier : Classifier {
     }
 
 
-    fun isAnimal(word: String) = allHypernyms(word).contains("animal")
+    fun isAnimal(word: String) = allHypernyms(word).intersect(animalHypernyms).isNotEmpty()
 
-    fun isPlant(word: String) = allHypernyms(word).contains("plant")
+    fun isPlant(word: String) = allHypernyms(word).intersect(vegHypernyms).isNotEmpty()
 
     override fun classify(word: String): Classification {
         val hypernyms = allHypernyms(word)
@@ -50,7 +50,7 @@ class WNClassifier : Classifier {
     }
 
     private val animalHypernyms  = listOf("animal", "person", "microorganism")
-    private val vegHypernyms = listOf("plant", "produce")
+    private val vegHypernyms = listOf("plant", "produce", "plant part", "fungus")
 
     fun classifyFromHypernyms(hypernyms: List<String>) =
             when {

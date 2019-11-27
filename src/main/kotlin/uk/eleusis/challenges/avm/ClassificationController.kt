@@ -10,5 +10,5 @@ class ClassificationController(
 ) {
 
     @RequestMapping("/classify")
-    fun classify(@RequestParam word: String) = mc.classify(word)
+    fun classify(@RequestParam() word: String) = mc.classify(word)
 }

@@ -3,9 +3,146 @@
 <head>
     <meta charset="UTF-8">
     <title>Classify THIS!</title>
+
+    <script>
+
+        async function onClassify(event) {
+            event.preventDefault(); // stop form from submitting
+            const query = document.getElementById("queryInput").value;
+            await visuallyClassify(query);
+        }
+
+        async function onRandom() {
+            document.getElementById("is").hidden = true;
+            document.getElementById("result").textContent = "";
+            document.getElementById("term").innerHTML = "<span class='loadtext'>... fetching ...</span>";
+            const term = await getRandomTerm();
+            await visuallyClassify(term);
+        }
+
+        async function visuallyClassify(term) {
+            document.getElementById("is").hidden = false;
+
+            document.getElementById("result").innerHTML = "<span class='loadtext'>... classifying ...</span>";
+            // document.getElementById("result").innerHTML = "<div class='loader'></div>";
+
+            document.getElementById("term").textContent = term;
+            document.getElementById("result").textContent = await classify(term);
+        }
+
+        async function classify(thing) {
+            const response = await fetch('/classify?word=' + thing);
+            if (response.status === 200) {
+                 //extract JSON from the http response
+                return await response.json()
+            }
+            else return "error"
+        }
+
+        async function getRandomTerm() {
+            const response = await fetch('https://script.googleusercontent.com/macros/echo?user_content_key=tuqf_2gQHzksNYgYvKi2XU6cMHnnRhcaRy8eRS6lDJsNjHb6tVxxeAnuGT3--K44T2GJGRasFEX3omrlgsojq8AcydaHxAebm5_BxDlH2jW0nuo2oDemN9CCS2h10ox_1xSncGQajx_ryfhECjZEnCQrgJrBr_wq9mqrjLXVxZ6OOccQWSnI5SA_c0mvm9zKuXgRWEwLqj2TOQiGIQt7_hdIug5zkO6q&lib=MuVsdrfoaGZEmjU4z1ag2pPoH_GRKR_iH');
+            if (response.status === 200) {
+                return await response.text();
+            }
+            else return "error";
+        }
+    </script>
+
+    <style type="text/css">
+        /*@import url('loader.css');*/
+        @import url('inputs.css');
+        @import url('https://fonts.googleapis.com/css?family=Lato|Raleway:400,400i&display=swap');
+
+        body {
+            font-family: 'Lato', sans-serif;
+            text-align: center;
+        }
+        input { font-family: 'Lato', sans-serif; }
+        h1 { font-family: 'Raleway', sans-serif; }
+
+        #header { grid-area: header; }
+        #form { grid-area: form; }
+        #random { grid-area: random; }
+
+        #term {
+            grid-area: term;
+            vertical-align: center;
+        }
+
+        #is {
+            grid-area: is;
+            vertical-align: center;
+            font-style: italic;
+        }
+
+        #result {
+            grid-area: result;
+            vertical-align: center;
+            font-size: large;
+            font-weight: bold;
+        }
+
+        #container {
+            display: grid;
+            grid-template-columns: 1fr 250px 300px 1fr;
+            grid-template-rows: auto 20px 20px 20px;
+            grid-template-areas:
+                    ". header . ."
+                    ". header term ."
+                    ". form is ."
+                    ". random result .";
+            grid-gap: 10px 20px; /* row column */
+        }
+
+        /*#container {*/
+        /*    display: grid;*/
+        /*    grid-template-columns: 1fr 180px 20px 100px 1fr;*/
+        /*    grid-template-rows: auto auto 50px;*/
+        /*    grid-template-areas:*/
+        /*            ". header header header ."*/
+        /*            ". form form form ."*/
+        /*            ". term is result .";*/
+        /*    grid-gap: 20px 20px; !* row column *!*/
+        /*}*/
+
+        .loadtext {
+            color: darkgrey;
+        }
+    </style>
 </head>
 <body>
-<h1>Classify THIS!</h1>
+
+<div id="container">
+
+    <div id="header">
+        <h1>Classify <em>THIS!</em></h1>
+    </div>
+
+    <div id="form">
+        <form id="query">
+            <input type="text" name="queryInput" id="queryInput" />
+            <input type="submit" name="classifyButton" value="Classify" />
+        </form>
+    </div>
+
+    <div id="random">
+        <button id="randomButton">Classify random term</button>
+    </div>
+
+    <div id="term"></div>
+    <div id="is" hidden="hidden">is</div>
+
+    <div id="result">
+        <!--<div class="loader"></div>-->
+    </div>
+</div>
+
+<script>
+    // onload functions:
+    // document.getElementById("is").hidden = true;
+    document.getElementById("query").addEventListener("submit", onClassify);
+    document.getElementById("randomButton").addEventListener("click", onRandom);
+</script>
 
 </body>
 </html>

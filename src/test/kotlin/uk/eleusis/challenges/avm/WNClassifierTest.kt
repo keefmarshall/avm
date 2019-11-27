@@ -35,7 +35,6 @@ internal class WNClassifierTest {
         assertTrue(wnc.isAnimal("coral"))
 
         assertFalse(wnc.isAnimal("table"))
-        assertFalse(wnc.isAnimal("pansy"))
     }
 
     @Test
@@ -45,6 +44,8 @@ internal class WNClassifierTest {
         assertTrue(wnc.isPlant("pansy"))
 
         assertTrue(wnc.isPlant("tree"))
+
+        assertTrue(wnc.isPlant("pollen"))
 
         assertFalse(wnc.isPlant("table"))
         assertFalse(wnc.isPlant("dog"))
@@ -57,6 +58,7 @@ internal class WNClassifierTest {
         assertEquals(VEGETABLE, wnc.classify("vegetable"))
         assertEquals(MINERAL, wnc.classify("mineral"))
 
+        //        assertEquals(MINERAL, wnc.classify("rock")) // currently fails, finds "John Rock"
 
         assertEquals(ANIMAL, wnc.classify("dog"))
         assertEquals(ANIMAL, wnc.classify("Elizabeth"))
@@ -64,10 +66,15 @@ internal class WNClassifierTest {
 
         assertEquals(ANIMAL, wnc.classify("coral"))
 
+        assertEquals(VEGETABLE, wnc.classify("pollen"))
+
         assertEquals(ANIMAL, wnc.classify("dinoflagellates"))
+        assertEquals(ANIMAL, wnc.classify("Tony Blair")) // bizarrely he's in WordNet!
+//        assertEquals(ANIMAL, wnc.classify("Jean-Michel Jarre"))  // not in WordNet
 
-//        assertEquals(MINERAL, wnc.classify("rock")) // currently fails, finds "John Rock"
-
+        // finds "plant" as in "manufacturing plant" - need to be more specific about hypernym terms
+//        assertEquals(MINERAL, wnc.classify("battery")) // currently returns VEGETABLE!!
+//        assertEquals(ANIMAL, wnc.classify("Cubby Broccoli")) // currently MINERAL
     }
 
     @Test
