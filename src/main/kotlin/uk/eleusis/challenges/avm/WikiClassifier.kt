@@ -23,6 +23,7 @@ class WikiClassifier : Classifier {
             hasAnimalCategories(article.pageId) -> ANIMAL
             hasPlantArticleTemplates(article.pageId) -> VEGETABLE
             hasPlantCategories(article.pageId) -> VEGETABLE
+            hasTaxonomyTemplate(article.pageId) -> classifyFromTaxoboxHTML(article.pageId)
             else -> UNKNOWN
         }
     }
@@ -37,6 +38,7 @@ class WikiClassifier : Classifier {
     fun hasPersonArticleTemplates(pageid: String) = hasTemplates(pageid, personTemplates)
     fun hasAnimalArticleTemplates(pageid: String)= hasTemplates(pageid, animalTemplates)
     fun hasPlantArticleTemplates(pageid: String)= hasTemplates(pageid, plantTemplates)
+    fun hasTaxonomyTemplate(pageid: String) = hasTemplates(pageid, "Template:Taxonomy|Template:Taxobox")
 
     /**
      * https://en.wikipedia.org/w/api.php?action=query&pageids=12153654&prop=templates&tltemplates=Template:Birth_date|Template:Birth_date_and_age
@@ -122,6 +124,56 @@ class WikiClassifier : Classifier {
                         page?.get("title")?.asText() ?: ""
                     )
             else -> null
+        }
+    }
+
+    // https://en.wikipedia.org/w/api.php?action=query&prop=revisions&pageids=37800458&rvprop=content
+    fun classifyFromRegnum(pageid: String): Classification {
+        val uriBuilder = UriComponentsBuilder.fromHttpUrl(wikipediaApiUri)
+                .queryParam("action", "query")
+                .queryParam("pageids", pageid)
+                .queryParam("prop", "revision")
+                .queryParam("rvprop", "content")
+                .queryParam("format", "json")
+
+        val response = RestTemplate().getForObject<ObjectNode>(uriBuilder.build().toUriString())
+
+        val page = response.get("query")?.get("pages")?.get(pageid)
+        val content = page?.get("revisions")?.get(0)?.get("*")?.asText() ?: ""
+
+        if (content.contains("Taxobox")) {
+            return when {
+                content.contains("regnum = [[Animal]]ia") -> ANIMAL
+                content.contains("regnum = [[Animal]]ia") -> ANIMAL
+                else -> UNKNOWN
+            }
+        }
+
+        return UNKNOWN
+    }
+
+    // https://en.wikipedia.org/w/api.php?action=parse&prop=text&section=0&page=Larix%20decidua
+    fun classifyFromTaxoboxHTML(pageid: String): Classification {
+        val uriBuilder = UriComponentsBuilder.fromHttpUrl(wikipediaApiUri)
+                .queryParam("action", "parse")
+                .queryParam("pageid", pageid)
+                .queryParam("prop", "text")
+                .queryParam("section", "0")
+                .queryParam("format", "json")
+
+        val response = RestTemplate().getForObject<ObjectNode>(uriBuilder.build().toUriString())
+
+        val content = response.get("parse")?.get("text")?.get("*")?.asText() ?: ""
+        return when {
+            content.contains("Animalia") -> ANIMAL
+            content.contains("Plantae") -> VEGETABLE
+            content.contains("Chromista") -> VEGETABLE // Algae etc
+            content.contains("Fungi") -> VEGETABLE
+            content.contains("Protozoa") -> ANIMAL // Amoebas etc
+            content.contains("Bacteria") -> ANIMAL
+            content.contains("Archaea") -> ANIMAL // similar to Bacteria
+
+            else -> UNKNOWN
         }
     }
 

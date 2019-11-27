@@ -20,15 +20,15 @@ class WNClassifier : Classifier {
     }
 
     // This loops through all senses of the word
-    fun allHypernyms(word: String) : List<String> {
+    fun allHypernyms(word: String) : List<Long> {
         val indexWords = dictionary.lookupAllIndexWords(word)
         return if (indexWords.size() > 0) {
             indexWords.indexWordArray
                     .flatMap { it.senses }
                     .flatMap { PointerUtils.getHypernymTree(it).toList() } // -> PointerTargetNodeList
                     .flatMap { it.asIterable() } // -> PointerTargetNode
-                    .flatMap { it.pointerTarget.synset.words }
-                    .map { it.lemma.toLowerCase() }
+                    .map { it.pointerTarget.synset.offset }
+//                    .map { it.senseNumber }
                     .distinct()
         } else {
             emptyList()
@@ -49,10 +49,12 @@ class WNClassifier : Classifier {
         }
     }
 
-    private val animalHypernyms  = listOf("animal", "person", "microorganism")
-    private val vegHypernyms = listOf("plant", "produce", "plant part", "fungus")
+    private val animalHypernyms  = listOf<Long>(15568, 7846, 1328932)
+//    private val animalHypernyms  = listOf("animal", "person", "microorganism")
+    private val vegHypernyms = listOf<Long>(17402, 7721456, 13107668, 13013628, 1399755)
+//    private val vegHypernyms = listOf("plant", "produce", "plant part", "fungus", "algae")
 
-    fun classifyFromHypernyms(hypernyms: List<String>) =
+    fun classifyFromHypernyms(hypernyms: List<Long>) =
             when {
                 hypernyms.intersect(vegHypernyms).isNotEmpty() -> VEGETABLE
                 hypernyms.intersect(animalHypernyms).isNotEmpty() -> ANIMAL

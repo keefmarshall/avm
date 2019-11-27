@@ -13,6 +13,7 @@ internal class WikiClassifierTest {
 
         assertEquals(Classification.ANIMAL, WikiClassifier().classify("Greyfriars Bobby"))
         assertEquals(Classification.ANIMAL, WikiClassifier().classify("Elsa the Lioness"))
+        assertEquals(Classification.ANIMAL, WikiClassifier().classify("Parastratiosphecomyia sphecomyioides"))
     }
 
     @Test

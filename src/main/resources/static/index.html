@@ -57,7 +57,7 @@
             font-family: 'Lato', sans-serif;
             text-align: center;
         }
-        input { font-family: 'Lato', sans-serif; }
+        input, button { font-family: 'Lato', sans-serif; }
         h1 { font-family: 'Raleway', sans-serif; }
 
         #header { grid-area: header; }
@@ -66,25 +66,27 @@
 
         #term {
             grid-area: term;
-            vertical-align: center;
+            /*vertical-align: center;*/
         }
 
         #is {
             grid-area: is;
-            vertical-align: center;
-            font-style: italic;
+            /*vertical-align: center;*/
+            /*font-style: italic;*/
+            font-size: large;
+            color: dimgrey;
         }
 
         #result {
             grid-area: result;
-            vertical-align: center;
+            /*vertical-align: center;*/
             font-size: large;
             font-weight: bold;
         }
 
         #container {
             display: grid;
-            grid-template-columns: 1fr 250px 300px 1fr;
+            grid-template-columns: 1fr 280px 300px 1fr;
             grid-template-rows: auto 20px 20px 20px;
             grid-template-areas:
                     ". header . ."
@@ -92,6 +94,8 @@
                     ". form is ."
                     ". random result .";
             grid-gap: 10px 20px; /* row column */
+            align-items: center;
+            justify-items: center;
         }
 
         /*#container {*/
@@ -121,7 +125,7 @@
     <div id="form">
         <form id="query">
             <input type="text" name="queryInput" id="queryInput" />
-            <input type="submit" name="classifyButton" value="Classify" />
+            <button type="submit" name="classifyButton">Classify</button>
         </form>
     </div>
 
@@ -130,7 +134,7 @@
     </div>
 
     <div id="term"></div>
-    <div id="is" hidden="hidden">is</div>
+    <div id="is" hidden="hidden">⬇</div>
 
     <div id="result">
         <!--<div class="loader"></div>-->

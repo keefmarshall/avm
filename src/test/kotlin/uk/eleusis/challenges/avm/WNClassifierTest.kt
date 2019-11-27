@@ -21,7 +21,7 @@ internal class WNClassifierTest {
     @Test
     fun allHypernyms() {
         val hypernyms = wnc.allHypernyms("dog")
-        assertTrue(hypernyms.size > 50)
+        assertTrue(hypernyms.size > 40)
     }
 
     @Test
@@ -72,9 +72,20 @@ internal class WNClassifierTest {
         assertEquals(ANIMAL, wnc.classify("Tony Blair")) // bizarrely he's in WordNet!
 //        assertEquals(ANIMAL, wnc.classify("Jean-Michel Jarre"))  // not in WordNet
 
-        // finds "plant" as in "manufacturing plant" - need to be more specific about hypernym terms
-//        assertEquals(MINERAL, wnc.classify("battery")) // currently returns VEGETABLE!!
-//        assertEquals(ANIMAL, wnc.classify("Cubby Broccoli")) // currently MINERAL
+        assertEquals(MINERAL, wnc.classify("battery"))
+//        assertEquals(ANIMAL, wnc.classify("Cubby Broccoli")) // currently MINERAL, finds 'cubby' -> cubbyhole
+//        assertEquals(ANIMAL, wnc.classify("Donald Trump")) // currently MINERAL, finds 'trump' -> trump card
+
+        // not sure what this should be, currently returns VEGETABLE as it finds a plant called cheese flower
+//        assertEquals(ANIMAL, wnc.classify("Cheese"))
+        assertEquals(UNKNOWN, wnc.classify("Parastratiosphecomyia sphecomyioides")) // type of fly
+
+        assertEquals(ANIMAL, wnc.classify("kitten"))
+        assertEquals(VEGETABLE, wnc.classify("seaweed")) // can resolve to microorganism, ordering important here
+
+        // Orange-peel doris - comes up as MINERAL
+        // chair - ANIMAL because chairperson
+        // Labrador - finds North American region, does not find the dog
     }
 
     @Test

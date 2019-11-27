@@ -18,6 +18,7 @@ class SpecificClassifier : Classifier {
 
             // WN finds 'John Rock' so gives ANIMAL
             "rock" to MINERAL,
+            "wood" to VEGETABLE, // because lots of surnames
 
             "salad" to VEGETABLE
     )
