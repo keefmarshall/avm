@@ -9,7 +9,7 @@ import org.springframework.web.util.UriComponentsBuilder
 import uk.eleusis.challenges.avm.Classification.*
 
 @Component
-@Order(99) // call this one last
+@Order(5)
 class WikiClassifier : Classifier {
 
     private val wikipediaApiUri = "https://en.wikipedia.org/w/api.php"

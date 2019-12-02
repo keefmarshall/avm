@@ -9,7 +9,7 @@ import org.springframework.core.annotation.Order
 import uk.eleusis.challenges.avm.Classification.*
 
 @Component
-@Order(2)
+@Order(10)
 class WNClassifier : Classifier {
 
     private lateinit var dictionary: Dictionary

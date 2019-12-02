@@ -10,7 +10,10 @@ class MasterClassifier(
 
     fun classify(word: String)
          = classifiers.asSequence()
-                .map { it.classify(word) }
+                .map {
+                    println("${it.javaClass.name}: $word")
+                    it.classify(word)
+                }
                 .filterNot { it == UNKNOWN }
                 .firstOrNull() ?: MINERAL
 }
