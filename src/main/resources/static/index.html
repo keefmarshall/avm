@@ -84,15 +84,21 @@
             font-weight: bold;
         }
 
+        #vertical-divider {
+            grid-area: vdiv;
+            box-shadow: 0 0 0 1px #E5E5EA;
+            height: 100%;
+        }
+
         #container {
             display: grid;
-            grid-template-columns: 1fr 280px 300px 1fr;
+            grid-template-columns: 1fr 280px 1px 300px 1fr;
             grid-template-rows: auto 20px 20px 20px;
             grid-template-areas:
-                    ". header . ."
-                    ". header term ."
-                    ". form is ."
-                    ". random result .";
+                    ". header . . ."
+                    ". header vdiv term ."
+                    ". form vdiv is ."
+                    ". random vdiv result .";
             grid-gap: 10px 20px; /* row column */
             align-items: center;
             justify-items: center;
@@ -132,6 +138,8 @@
     <div id="random">
         <button id="randomButton">Classify random term</button>
     </div>
+
+    <div id="vertical-divider"></div>
 
     <div id="term"></div>
     <div id="is" hidden="hidden">⬇</div>
